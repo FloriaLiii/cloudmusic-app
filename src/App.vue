@@ -1,16 +1,19 @@
 <template>
-  <router-view/>
+    <router-view />
 </template>
 
 <style lang="less">
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .icon {
-  width: .5rem;
-  height: .5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+}
+a {
+    color: black;
 }
 </style>
