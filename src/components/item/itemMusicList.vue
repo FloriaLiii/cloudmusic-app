@@ -3,7 +3,7 @@
         <!-- 歌单头部 -->
         <div class="itemListTop">
             <!-- 头部左边 -->
-            <div class="listLeft">
+            <div class="listLeft" @click="playMusic">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-bofang1"></use>
                 </svg>
@@ -24,7 +24,7 @@
             <!-- 每首歌样式 -->
             <div class="itemList" v-for="(song, i) in songsList" :key="i">
                 <!-- 每首歌左边 -->
-                <div class="listLeft">
+                <div class="listLeft" @click="playMusic(i)">
                     <span class="index">{{ i + 1 }}</span>
                     <div class="content">
                         <p>{{ song.name }}</p>
@@ -52,8 +52,16 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
     props: ['songsList', 'subscribedCount'],
+    methods: {
+        playMusic: function (i) {
+            this.updatePlayList(this.songsList)
+            this.updatePlayListIndex(i)
+        },
+        ...mapMutations(['updatePlayList', 'updatePlayListIndex']),
+    },
 }
 </script>
 
