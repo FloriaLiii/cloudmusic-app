@@ -30,7 +30,7 @@
         </div>
 
         <div class="contentRight">
-            <p class="rightP_one"></p>
+            <p class="rightP_one">{{ playList.name }}</p>
             <div class="right_img">
                 <img :src="playList.creator.avatarUrl" alt="" />
                 <span>{{ playList.creator.nickname }}</span>
@@ -81,7 +81,7 @@ export default {
 
     setup(props) {
         // props.playList.creator = ''
-        console.log(props, 111)
+        // console.log(props, 111)
         if ((props.playList.creator = '')) {
             props.playList.creator = JSON.parse(sessionStorage.getItem().playList).creator
         }

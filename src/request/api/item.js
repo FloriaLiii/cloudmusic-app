@@ -6,3 +6,11 @@ export function getMusicList(id) {
         url: `/playlist/detail?id=${id}`,
     })
 }
+
+//获取歌单歌曲
+export function getSongs(id) {
+    return service({
+        method: 'get',
+        url: `/playlist/detail?id=${id}`,
+    })
+}
