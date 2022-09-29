@@ -34,7 +34,7 @@ export default {
             //获取歌单中的歌曲
             const res2 = await getSongs(id)
             // console.log(res2)
-            // console.log(res2.data.playlist.tracks)
+            console.log(res2.data.playlist.tracks)
             state.songsList = res2.data.playlist.tracks
 
             //防止页面刷新，数据丢失，将数据保存到sessionStorge中

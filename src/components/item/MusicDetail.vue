@@ -1,6 +1,16 @@
 <template>
     <div class="musicDetail">
-        <img :src="musicPlaying.al.picUrl" alt="" class="bgImg" />
+        <!-- <img :src="musicPlaying.al.picUrl" alt="" class="bgImg" /> -->
+        <div
+            class="bgImg"
+            style="
+                opacity: 1;
+                transform: scale(1.5);
+                transform-origin: center center;
+                filter: blur(30px);
+            "
+            :style="{ backgroundImage: `url(${musicPlaying.al.picUrl})` }"
+        ></div>
         <!-- 歌曲详情头部 -->
         <div class="detailTop">
             <div class="left">
@@ -101,11 +111,11 @@
                 <svg class="icon normalSize" aria-hidden="true" @click="updateMusic(-1)">
                     <use xlink:href="#icon-icon-1"></use>
                 </svg>
-                <svg class="icon play" aria-hidden="true" @click="play" v-if="isbtnShow">
+                <svg class="icon play" aria-hidden="true" @click="playMusic" v-if="isbtnShow">
                     <use xlink:href="#icon-bofang2"></use>
                 </svg>
-                <svg class="icon play" aria-hidden="true" @click="play" v-else>
-                    <use xlink:href="#icon-zanting2-copy"></use>
+                <svg class="icon play" aria-hidden="true" @click="playMusic" v-else>
+                    <use xlink:href="#icon-zanting"></use>
                 </svg>
                 <svg class="icon normalSize" aria-hidden="true" @click="updateMusic(+1)">
                     <use xlink:href="#icon-icon-"></use>
@@ -126,7 +136,7 @@ import { ref } from 'vue'
 export default {
     props: [
         'musicPlaying',
-        'play',
+        'playMusic',
         'isbtnShow',
         'sliderValue',
         'audioStart',
@@ -155,7 +165,7 @@ export default {
                 index = 0
             }
             this.updatePlayListIndex(index)
-            this.play()
+            this.playMusic()
         },
         //改变歌曲总时间
         dateTotalTime(audioEnd) {
@@ -228,7 +238,7 @@ export default {
                 this.updateMusic(1)
                 if (this.playListIndex === this.playList.length - 1) {
                     this.updatePlayListIndex(0)
-                    this.play()
+                    this.playMusic()
                 } else {
                     this.updatePlayListIndex(this.playListIndex + 1)
                 }
@@ -253,6 +263,19 @@ export default {
         position: absolute;
         z-index: -1;
         filter: blur(50px);
+        background-color: #161824;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-size: auto 100%;
+    }
+    .bgImg:before {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.5);
     }
     .detailTop {
         display: flex;
@@ -381,13 +404,13 @@ export default {
         align-items: center;
         p {
             text-align: center;
-            color: #cfcece;
+            color: hsla(0, 0%, 100%, 0.6);
             margin-bottom: 0.3rem;
             transition: color 0.5s linear;
         }
         p.active_2 {
             color: #fff;
-            font-size: 0.4rem;
+            font-size: 0.3rem;
         }
         //隐藏滚动条
         scrollbar-width: none; /* firefox */

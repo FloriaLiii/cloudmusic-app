@@ -6,15 +6,15 @@ export default createStore({
             //播放列表
             {
                 al: {
-                    id: 35829532,
-                    name: 'Havana',
-                    pic: 18425615858527510,
-                    picUrl: 'http://p4.music.126.net/zUp6BqKPn1lmZINHsVDoew==/18425615858527510.jpg',
-                    pic_str: '18425615858527510',
+                    id: 89090040,
+                    name: 'Love Songs: Chart and Oldies Romance',
+                    pic: 109951164967359150,
+                    picUrl: 'http://p4.music.126.net/QQ1KpP1pbE_hZ0itDsEmlA==/109951164967359158.jpg',
+                    pic_str: '109951164967359158',
                 },
-                name: 'Havana',
-                id: 494865824,
-                ar: [{ name: 'Camila Cabello' }],
+                name: 'Levitating',
+                id: 1446218812,
+                ar: [{ name: 'Dua Lipa' }],
             },
         ],
         playListIndex: 0, //默认播放歌曲下标

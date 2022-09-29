@@ -1,20 +1,149 @@
 <template>
     <div class="search">
+        <!-- 搜索头部 -->
         <div class="searchTop">
             <svg class="icon" aria-hidden="true" @click="$router.go(-1)">
                 <use xlink:href="#icon-zuojiantou"></use>
             </svg>
-            <input type="text" />
+            <input type="text" v-model="searchKey" @keydown.enter="enterKey" />
         </div>
+        <!-- 搜索历史 -->
         <div class="searchHistory">
             <div class="top">
                 <div class="history">历史搜索</div>
-                <div><span></span><span></span></div>
+                <div v-if="deleteShow">
+                    <span @click="delAllHistory" class="deleteAll">全部清空</span>
+                    <span @click="updateDeleteShow" style="font-weight: 700">完成</span>
+                </div>
+                <svg class="icon" aria-hidden="true" v-else @click="updateDeleteShow">
+                    <use xlink:href="#icon-delete"></use>
+                </svg>
             </div>
-            <div class="contentList"></div>
+            <div class="contentList">
+                <div class="content" v-for="item in keyWordList" :key="item">
+                    <svg
+                        class="icon"
+                        aria-hidden="true"
+                        v-if="deleteShow"
+                        @click="delHistory(item)"
+                    >
+                        <use xlink:href="#icon-cuowu"></use>
+                    </svg>
+                    <span @click="searchHistory(item)">
+                        {{ item }}
+                    </span>
+                </div>
+            </div>
         </div>
+        <div
+            class="musicListContent"
+            v-for="(song, index) in searchMusicList"
+            :key="index"
+            @click="playMusic(index)"
+        >
+            <div class="musicList">
+                <div class="listLeft">
+                    <span class="index">{{ index + 1 }}</span>
+                    <div class="content">
+                        <p>{{ song.name }}</p>
+                        <span v-for="(ar, index) in song.ar"
+                            >{{ ar.name }} <span v-if="index + 1 < song.ar.length">/ </span></span
+                        >
+                    </div>
+                </div>
+                <div class="listRight">
+                    <svg class="icon" aria-hidden="true" v-if="song.mv">
+                        <use xlink:href="#icon-shipinbofang"></use>
+                    </svg>
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-xuanxiang"></use>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="block"></div>
     </div>
 </template>
+
+<script>
+import { getSearchMusic } from '@/request/api/home.js'
+import { mapMutations } from 'vuex'
+export default {
+    data() {
+        return {
+            keyWordList: [],
+            searchKey: '',
+            searchMusicList: [],
+            deleteShow: false,
+        }
+    },
+    methods: {
+        ...mapMutations(['updatePlayList', 'updatePlayListIndex', 'updatePlayAll']),
+        enterKey: async function () {
+            if (!this.searchKey) return
+            this.keyWordList.unshift(this.searchKey)
+            //去重
+            this.keyWordList = [...new Set(this.keyWordList)]
+            //固定长度
+            if (this.keyWordList.length > 4) {
+                this.keyWordList.pop()
+            }
+            localStorage.setItem('keyWordList', JSON.stringify(this.keyWordList))
+            let res = await getSearchMusic(this.searchKey)
+            console.log(res)
+            this.searchMusicList = res.data.result.songs
+            console.log(this.searchMusicList)
+            this.searchKey = ''
+        },
+        deleteAll() {
+            localStorage.removeItem('keyWordList')
+            this.keyWordList = []
+        },
+        //删除的显示
+        updateDeleteShow() {
+            this.deleteShow = !this.deleteShow
+        },
+        //删除全部历史记录
+        delAllHistory() {
+            localStorage.removeItem('keyWordList')
+            this.keyWordList = []
+        },
+        //删除指定历史记录
+        delHistory(name) {
+            //查找元素在该数组的位置
+            Array.prototype.seek = function (val) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i] == val) return i
+                }
+                return -1
+            }
+            //删除数组中的指定元素
+            Array.prototype.deleteVal = function (val) {
+                var index = this.seek(val)
+                if (index > -1) {
+                    this.splice(index, 1)
+                }
+            }
+            this.keyWordList.deleteVal(name)
+            localStorage.setItem('keyWordList', JSON.stringify(this.keyWordList))
+        },
+        //搜索历史
+        searchHistory: async function (item) {
+            this.searchKey = item
+            this.enterKey()
+        },
+        //播放歌曲
+        playMusic(index) {
+            this.updatePlayList(this.searchMusicList)
+            this.updatePlayListIndex(index)
+            this.updatePlayAll()
+        },
+    },
+    mounted() {
+        this.keyWordList = JSON.parse(localStorage.getItem('keyWordList')) || []
+    },
+}
+</script>
 
 <style lang="less" scoped>
 .search {
@@ -67,9 +196,10 @@
                 }
                 span {
                     padding: 0.1rem 0.2rem;
-                    background-color: rgba(185, 169, 169, 0.5);
+                    background-color: rgb(104 103 103 / 50%);
                     border-radius: 0.4rem;
                     margin: 0.4rem 0.2rem;
+                    color: #fff;
                 }
             }
         }
@@ -116,10 +246,10 @@
                 width: 20%;
                 height: 100%;
                 display: flex;
+                justify-content: end;
                 align-items: center;
                 position: relative;
                 .icon {
-                    position: absolute;
                     z-index: 2;
                     fill: #999;
                 }

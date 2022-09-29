@@ -10,10 +10,10 @@
         </div>
         <!-- 底部右边 -->
         <div class="footerRight">
-            <svg class="icon" aria-hidden="true" @click="play" v-if="isbtnShow">
+            <svg class="icon" aria-hidden="true" @click="playMusic" v-if="isbtnShow">
                 <use xlink:href="#icon-bofang"></use>
             </svg>
-            <svg class="icon" aria-hidden="true" @click="play" v-else>
+            <svg class="icon" aria-hidden="true" @click="playMusic" v-else>
                 <use xlink:href="#icon-zanting"></use>
             </svg>
             <svg class="icon" aria-hidden="true">
@@ -33,7 +33,7 @@
         >
             <music-detail
                 :musicPlaying="playList[playListIndex]"
-                :play="play"
+                :playMusic="playMusic"
                 :isbtnShow="isbtnShow"
                 :addDuration="addDuration"
                 :sliderValue="sliderValue"
@@ -65,7 +65,7 @@ export default {
         }
     },
     methods: {
-        play: function (e) {
+        playMusic: function (e) {
             if (this.$refs.audio.paused) {
                 this.$refs.audio.play()
                 this.updateIsbtnShow(false)
